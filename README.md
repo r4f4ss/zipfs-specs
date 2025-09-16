@@ -16,3 +16,7 @@ This approach has the following advantages:
 1. Dictionaries should not be trained using private data, they should be built from public datasets. It’s possible to store large, comprehensive shared dictionaries tailored to different data types. I believe that compression ratios can be significantly improved compared to local dictionary methods.
 2. Dictionary downloads tend to be fast and parallelizable. Large dictionaries can be split into smaller chunks, allowing for faster, efficient, and more scalable downloads of large compressed files, especially compared to centralized sources.
 3. Dictionaries contain only meaningless data. The actual information remains stored locally, making it completely secure. This is particularly useful in scenarios involving private data, regulatory compliance, or even as an alternative to encryption in certain use cases.
+
+## License
+
+ZIPFS Specification is marked [CC0 1.0 Universal](./LICENSE).
