@@ -7,7 +7,7 @@
 
 ZIPFS is a [dictionary-based](https://en.wikipedia.org/wiki/Dictionary_coder) method for compression and decompression of files, lossless, and with support of the [IPFS network](https://ipfs.tech/). It is not an algorithm itself but may rely on several underlying algorithms.
 
-The compression consists in finding the most frequent codes in a file and giving them the [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding), composing the dictionary. Large dictionaries trained for specific file types can be built and stored in the IPFS network, hence, ZIPFS qualifies as a static dictionary method. The algorithm used to build the dictionary is not fixed by the specification and can be chosen from any available option.
+The compression consists in finding the most frequent arbitrary size codes in a file and giving them the [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding), composing the dictionary. Large dictionaries trained for specific file types can be built and stored in the IPFS network, hence, ZIPFS qualifies as a static dictionary method. The algorithm used to build the dictionary is not fixed by the specification and can be chosen from any available option.
 
 The decompression process consists of download the respective dictionary from the IPFS network and decode the compressed file, which is composed of Huffman codes. A compressed file does not carry any dictionary since it is already stored in the IPFS network. 
 
