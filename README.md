@@ -17,6 +17,23 @@ This approach has the following advantages:
 2. Dictionary downloads tend to be fast and parallelizable. Large dictionaries can be split into smaller chunks, allowing for faster, efficient, and more scalable downloads of large compressed files, especially compared to centralized sources.
 3. Dictionaries contain only meaningless data. The actual information remains stored locally, making it completely secure. This is particularly useful in scenarios involving private data, regulatory compliance, or even as an alternative to encryption in certain use cases.
 
+## Dictionary
+
+A dictionary is a data structure composed of metadata and a main section, which is a list of file segments ordered from the shortest Huffman code to the longest. The Huffman codes themselves are omitted, since their values are already known.
+
+Dictionaries are the public portion of compressed files and are designed to be stored on the IPFS network. The [InterPlanetary Linked Data (IPLD)](https://ipld.io/) standard is used to specify and construct such structures, which follow the layout:
+
+```
+type Dictionary struct {
+	Name                 String
+	Description optional String
+	Segments             [Bytes]
+}
+```
+- Name is the name of the dictionary.
+- Description is an optional field that may contain any relevant metadata provided by the dictionary’s creator, such as the algorithm used, the type of target file, the version, or any other relevant information.
+- Segments is a List of Lists of bytes, where each element of the outer list corresponds to a file segment. This field must be ordered from the segment corresponding to the shortest Huffman code to the one corresponding to the longest.
+
 ## License
 
 ZIPFS Specification is marked [CC0 1.0 Universal](./LICENSE).
