@@ -21,7 +21,13 @@ This approach has the following advantages:
 
 A dictionary is a data structure composed of metadata and a main section, which is a list of file segments ordered from the shortest Huffman code to the longest. The Huffman codes themselves are omitted, since their values are already known.
 
-Dictionaries are the public portion of compressed files and are designed to be stored on the IPFS network. The [InterPlanetary Linked Data (IPLD)](https://ipld.io/) standard is used to specify and construct such structures, which follow the layout:
+Dictionaries are the public portion of compressed files and are designed to be stored on the IPFS network. The [InterPlanetary Linked Data (IPLD)](https://ipld.io/) standard is used to specify and construct such structures, that should be encoded using the codec [DAG-CBOR](https://ipld.io/docs/codecs/known/dag-cbor/).
+
+Two types of dictionaries are specified: the first is the single-block dictionary, designed to store small dictionaries that must fit entirely within a single block. The second is the multi-block dictionary, which can split the dictionary across multiple blocks, intended for large dictionaries and optimized for download and decompression.
+
+### Single-block dictionary
+
+Single-block dictionary have the layout:
 
 ```
 type Dictionary struct {
