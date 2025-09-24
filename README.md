@@ -40,6 +40,15 @@ type Dictionary struct {
 - Description is an optional field that may contain any relevant metadata provided by the dictionary’s creator, such as the algorithm used, the type of target file, the version, or any other relevant information.
 - Segments is a List of Lists of bytes, where each element of the outer list corresponds to a file segment. This field must be ordered from the segment corresponding to the shortest Huffman code to the one corresponding to the longest.
 
+
+### Multi-block dictionary
+
+TODO
+
+### Dictionary training
+
+TODO
+
 ## License
 
 ZIPFS Specification is marked [CC0 1.0 Universal](./LICENSE).
