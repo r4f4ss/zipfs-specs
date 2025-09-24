@@ -49,6 +49,27 @@ TODO
 
 TODO
 
+## Compression e decompression
+
+Compression consists of taking an original file, provided by the user, as input and producing a compressed file as output. The input file may be any file in any format, and its specification is outside the scope of this document. The output file, or compressed file, however, follows a standard that must be defined by the ZIPFS method. The decompression process is the inverse of compression, it takes the compressed file as input and produces the original file as output.
+
+### Compressed file
+
+A compressed file essentially consists of a sequence of Huffman codes that represent the corresponding segments found in the dictionary. The dictionary is stored on the IPFS network and must be referenced by its CID. The file has the following layout:
+
+```
+type CompressedFile struct {
+	Name       String
+	Dictionary CID
+	Length     uint64
+	Data       [Byte]
+}
+```
+- Name is the name of the original file.
+- Dictionary is the dictionary containing the file segments, represented by a CID that addresses it on the IPFS network.
+- Length is the length of the file, expressed as the number of Huffman codes, or equivalently, the number of segments.
+- Data are the Huffman codes that make up the file. The codes are packed (concatenated) and may receive final padding to complete a byte array.
+
 ## License
 
 ZIPFS Specification is marked [CC0 1.0 Universal](./LICENSE).
