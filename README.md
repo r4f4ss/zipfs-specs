@@ -7,7 +7,9 @@
 
 ZIPFS is a [dictionary-based](https://en.wikipedia.org/wiki/Dictionary_coder) method for compression and decompression of files, lossless, and with support of the [IPFS network](https://ipfs.tech/). It is not an algorithm itself but may rely on several underlying algorithms.
 
-The compression consists in finding the most frequent arbitrary size segments of a file and giving them the [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding), composing the dictionary. Large dictionaries trained for specific file types can be built and stored in the IPFS network, hence, ZIPFS qualifies as a static dictionary method. The algorithm used to build the dictionary is not fixed by the specification and can be chosen from any available option.
+The compression consists in finding the most frequent arbitrary size segments (i.e. substrings) of a file and giving them the [Huffman coding](https://en.wikipedia.org/wiki/Huffman_coding), composing the dictionary. Due to the advantages of a smaller dictionary size and the simplification of the compression and decompression algorithm, the [Canonical Huffman code](https://en.wikipedia.org/wiki/Canonical_Huffman_code) is used. 
+
+Large dictionaries trained for specific file types can be built and stored in the IPFS network, hence, ZIPFS qualifies as a static dictionary method. The algorithm used to build the dictionary is not fixed by the specification and can be chosen from any available option.
 
 The decompression process consists of download the respective dictionary from the IPFS network and decode the compressed file, which is composed of Huffman codes. A compressed file does not carry any dictionary since it is already stored in the IPFS network. 
 
@@ -49,7 +51,7 @@ TODO
 
 TODO
 
-## Compression e decompression
+## Compression and decompression
 
 Compression consists of taking an original file, provided by the user, as input and producing a compressed file as output. The input file may be any file in any format, and its specification is outside the scope of this document. The output file, or compressed file, however, follows a standard that must be defined by the ZIPFS method. The decompression process is the inverse of compression, it takes the compressed file as input and produces the original file as output.
 
@@ -61,13 +63,11 @@ A compressed file essentially consists of a sequence of Huffman codes that repre
 type CompressedFile struct {
 	Name       String
 	Dictionary CID
-	Length     uint64
 	Data       [Byte]
 }
 ```
 - Name is the name of the original file.
 - Dictionary is the dictionary containing the file segments, represented by a CID that addresses it on the IPFS network.
-- Length is the length of the file, expressed as the number of Huffman codes, or equivalently, the number of segments.
 - Data are the Huffman codes that make up the file. The codes are packed (concatenated) and may receive final padding to complete a byte array.
 
 ## License
