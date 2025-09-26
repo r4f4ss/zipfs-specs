@@ -70,6 +70,40 @@ type CompressedFile struct {
 - Dictionary is the dictionary containing the file segments, represented by a CID that addresses it on the IPFS network.
 - Data are the Huffman codes that make up the file. The codes are packed (concatenated) and may receive final padding to complete a byte array.
 
+### Compression
+
+Let a file of $n$ bytes be denoted as $F = f_0 f_1 \ldots f_{n-1}$ and the dictionary with $m$ segments as $D = (d_0, d_1, \ldots, d_{m-1})$, where the order of the segments matters, since earlier segments receive shorter Huffman codes. The compression process consists of replacing occurrences of segment $d_i$ in the file $F$ with its corresponding Huffman code. In the case of ambiguity between segments of different lengths, the segment with the shorter Huffman code, or the one that appears earlier in $D$, is always chosen.
+
+For example, if the file $F$ consists of an english text and contains the segment `alte`, and the dictionary $D$ has two ambiguous segments $f_i = a$ and $f_j = alt$ with $i < j$, then the segment `a` in the file is replaced by its Huffman code, since this segment has a shorter code because $i < j$. The remaining substring `lte` in $F$ must then be replaced by other codes according to the dictionary.
+
+Below is pseudocode that implements a compression algorithm as described. Note that the goal of this algorithm is not efficiency, but rather to illustrate the functioning of the compression process.
+
+```
+INPUT: file F and dictionary D
+OUTPUT: compressed file C
+START
+	FOR i IN LENGTH(D)
+		FOR j = 0, j < LENGTH(F), j++
+			IF isSameSegment(D,F,i,j)
+				C[j] = 2^i-1
+				j = j + LENGTH(D[i]) - 1
+    		END IF
+		END FOR
+	END FOR
+END
+```
+The auxiliary function *isSameSegment*:
+```
+FUNCTION isSameSegment(D,F,i,j):
+	FOR z IN LENGTH(D[i])
+		IF D[i][z] != F[j][z]
+			RETURN false
+		END IF
+	END FOR
+	RETURN true
+END FUNCTION
+```
+
 ## License
 
 ZIPFS Specification is marked [CC0 1.0 Universal](./LICENSE).
