@@ -72,7 +72,7 @@ type CompressedFile struct {
 
 ### Compression
 
-Let a file of $n$ bytes be denoted as $F = f_0 f_1 \ldots f_{n-1}$ and the dictionary with $m$ segments as $D = (d_0, d_1, \ldots, d_{m-1})$, where the order of the segments matters, since earlier segments receive shorter Huffman codes. The compression process consists of replacing occurrences of segment $d_i$ in the file $F$ with its corresponding Huffman code. In the case of ambiguity between segments of different lengths, the segment with the shorter Huffman code, or the one that appears earlier in $D$, is always chosen.
+Let a file of $n$ bytes be denoted as $F = f_0 f_1 \ldots f_{n-1}$ and the dictionary with $m$ segments as $D = [d_0, d_1, \ldots, d_{m-1}]$, where the order of the segments matters, since earlier segments receive shorter Huffman codes. The compression process consists of replacing occurrences of segment $d_i$ in the file $F$ with its corresponding Huffman code. In the case of ambiguity between segments of different lengths, the segment with the shorter Huffman code, or the one that appears earlier in $D$, is always chosen.
 
 For example, if the file $F$ consists of an english text and contains the segment `alte`, and the dictionary $D$ has two ambiguous segments $f_i = a$ and $f_j = alt$ with $i < j$, then the segment `a` in the file is replaced by its Huffman code, since this segment has a shorter code because $i < j$. The remaining substring `lte` in $F$ must then be replaced by other codes according to the dictionary.
 
@@ -85,7 +85,7 @@ START
 	FOR i IN LENGTH(D)
 		FOR j = 0, j < LENGTH(F), j++
 			IF isSameSegment(D,F,i,j)
-				C[j] = 2^i-1
+				INSERT(C,j,2^i-1)
 				j = j + LENGTH(D[i]) - 1
     		END IF
 		END FOR
@@ -102,6 +102,22 @@ FUNCTION isSameSegment(D,F,i,j):
 	END FOR
 	RETURN true
 END FUNCTION
+```
+
+### Decompression
+
+Let the compressed file contain $k$ Huffman codes $C = c_0c_1 \ldots c_{k-1}$. Note that each Huffman code may have a different length and is packed in the original compressed file. However, it is convenient to represent the compressed file as a sequence of codes in order to simplify the decompression logic. Let the dictionary consist of $m$ segments, defined as $D = \{0:d_0, 10: d_1, 110:d_2 \ldots, 11 \ldots 0:d_{m-1}\}$. Observe that the dictionary is represented as a map, in contrast to the vector-based representation used during compression. This choice is made because efficient mapping between Huffman codes and segments facilitates the decompression process.
+
+Below is pseudocode that implements the decompression algorithm as described, with the goal of illustrating the process rather than optimizing for efficiency.
+
+```
+INPUT: compressed file C and dictionary (map) D
+OUTPUT: original file F
+START
+	FOR i IN LENGTH(C)
+		INSERT(F,i,D[C[i]])
+	END FOR
+END
 ```
 
 ## License
