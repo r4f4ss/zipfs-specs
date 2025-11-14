@@ -70,7 +70,7 @@ type CompressedFile struct {
 - Dictionary is the dictionary containing the file segments, represented by a CID that addresses it on the IPFS network.
 - Data are the Huffman codes that make up the file. The codes are packed (concatenated) and may receive final padding to complete a byte array.
 
-Since the dictionaries are not built from the files themselves, it is possible for a file to contain a segment that is not covered by the dictionary. In this case, code `00` is placed in the `Data`, followed by one byte containing the file segment that is not present in the dictionary. There is no ambiguity because code `00` is not used by the Canonical Huffman code. Every byte not covered by the dictionary must follow this rule.
+Since the dictionaries are not built from the files themselves, a file may contain a segment that is not represented in the dictionary. In such cases, the first unused Huffman code (i.e., the `last + 1` code) is written to `Data`, followed by a single byte containing the file segment that is not present in the dictionary. There is no ambiguity because this code is not used by any other segment. Every byte not covered by the dictionary must follow this rule.
 
 ### Compression
 
