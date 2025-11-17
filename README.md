@@ -61,14 +61,14 @@ A compressed file essentially consists of a sequence of Huffman codes that repre
 
 ```
 type CompressedFile struct {
-	Name       String
 	Dictionary CID
 	Data       [Byte]
 }
 ```
-- Name is the name of the original file.
 - Dictionary is the dictionary containing the file segments, represented by a CID that addresses it on the IPFS network.
 - Data are the Huffman codes that make up the file. The codes are packed (concatenated) and may receive final padding to complete a byte array.
+
+The `CompressedFile` structure must be stored on disk in files using the [Concise Binary Object Representation (CBOR)](https://cbor.io/) data format, such files corresponds to compressed files.
 
 Since the dictionaries are not built from the files themselves, a file may contain a segment that is not represented in the dictionary. In such cases, the first unused Huffman code (i.e., the `last + 1` code) is written to `Data`, followed by a single byte containing the file segment that is not present in the dictionary. There is no ambiguity because this code is not used by any other segment. Every byte not covered by the dictionary must follow this rule.
 
